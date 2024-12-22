@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 1.5rem;
+            color: #4CAF50;
+        }
+
+        .footer {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1rem;
+            font-weight: 300;
+            color: #777;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 60px; /* Adding margin to make space for header */
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 1rem;
+            margin: 10px 0;
+            display: block;
+        }
+
+        input[type="number"], select {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 5px 0;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #4CAF50;
+        }
+
+        .result span {
+            font-weight: bold;
+        }
+
+        .bmi-status {
+            margin-top: 20px;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">Knowledge Park International School</div>
+<div class="footer">Web-App created by Abdul Munaam X-B1</div>
+
+<div class="container">
+    <h1>BMI Calculator</h1>
+    <label for="weight">Weight (kg):</label>
+    <input type="number" id="weight" placeholder="Enter your weight" required>
+
+    <label for="height">Height:</label>
+    <input type="number" id="height" placeholder="Enter your height in cm" required>
+
+    <label for="unit">Unit:</label>
+    <select id="unit">
+        <option value="cm">cm</option>
+        <option value="ft">ft & inch</option>
+    </select>
+
+    <button onclick="calculateBMI()">Calculate BMI</button>
+
+    <div id="result" class="result"></div>
+    <div id="bmi-status" class="bmi-status"></div>
+</div>
+
+<script>
+    function calculateBMI() {
+        let weight = document.getElementById('weight').value;
+        let height = document.getElementById('height').value;
+        let unit = document.getElementById('unit').value;
+        let bmi, status = '';
+
+        if (weight === '' || height === '') {
+            alert("Please enter both weight and height.");
+            return;
+        }
+
+        if (unit === 'cm') {
+            height = height / 100;  // Convert height from cm to meters
+        } else {
+            // Convert feet and inches to cm
+            let feet = Math.floor(height / 12);
+            let inches = height % 12;
+            height = (feet * 30.48) + (inches * 2.54);  // Convert feet and inches to cm
+            height = height / 100;  // Convert height to meters
+        }
+
+        bmi = weight / (height * height);  // BMI Formula
+        bmi = bmi.toFixed(2);  // Round to two decimal places
+
+        document.getElementById('result').innerHTML = `Your BMI: <span>${bmi}</span>`;
+        
+        if (bmi < 18.5) {
+            status = 'Underweight';
+            document.getElementById('bmi-status').style.color = 'orange';
+        } else if (bmi >= 18.5 && bmi < 24.9) {
+            status = 'Normal weight';
+            document.getElementById('bmi-status').style.color = 'green';
+        } else if (bmi >= 25 && bmi < 29.9) {
+            status = 'Overweight';
+            document.getElementById('bmi-status').style.color = 'yellow';
+        } else {
+            status = 'Obesity';
+            document.getElementById('bmi-status').style.color = 'red';
+        }
+
+        document.getElementById('bmi-status').innerHTML = `Status: <span>${status}</span>`;
+    }
+</script>
+
+</body>
+</html>
