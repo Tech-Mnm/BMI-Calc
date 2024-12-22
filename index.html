@@ -58,6 +58,9 @@
             font-size: 18px;
             margin-top: 10px;
         }
+        #feetInputs {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -68,19 +71,28 @@
     <div class="container">
         <h2>BMI Calculator</h2>
 
-        <label for="height">Height:</label>
-        <input type="number" id="height" placeholder="cm" required>
-        
-        <label for="weight">Weight:</label>
-        <input type="number" id="weight" placeholder="kg" required>
-
-        <br><br>
-
         <label for="unit">Select Unit:</label>
-        <select id="unit">
+        <select id="unit" onchange="toggleUnitInputs()">
             <option value="cm">Centimeters</option>
             <option value="ft">Feet/Inches</option>
         </select>
+
+        <div id="cmInput">
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" placeholder="cm" required>
+        </div>
+
+        <div id="feetInputs">
+            <label for="feet">Height (feet):</label>
+            <input type="number" id="feet" placeholder="ft" required>
+            <label for="inches">Height (inches):</label>
+            <input type="number" id="inches" placeholder="in" required>
+        </div>
+
+        <br><br>
+
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" placeholder="kg" required>
 
         <br><br>
 
@@ -91,18 +103,29 @@
     </div>
 
     <script>
+        function toggleUnitInputs() {
+            var unit = document.getElementById("unit").value;
+            if (unit === "ft") {
+                document.getElementById("cmInput").style.display = "none";
+                document.getElementById("feetInputs").style.display = "block";
+            } else {
+                document.getElementById("cmInput").style.display = "block";
+                document.getElementById("feetInputs").style.display = "none";
+            }
+        }
+
         function calculateBMI() {
-            var height = document.getElementById("height").value;
-            var weight = document.getElementById("weight").value;
+            var height, weight = document.getElementById("weight").value;
             var unit = document.getElementById("unit").value;
             var resultText = document.getElementById("result");
             var categoryText = document.getElementById("category");
 
             if (unit === "ft") {
-                // Convert height from feet/inches to cm
-                var feet = Math.floor(height);
-                var inches = Math.round((height - feet) * 12);
-                height = feet * 30.48 + inches * 2.54;
+                var feet = document.getElementById("feet").value;
+                var inches = document.getElementById("inches").value;
+                height = (feet * 30.48) + (inches * 2.54); // Convert feet/inches to cm
+            } else {
+                height = document.getElementById("height").value;
             }
 
             if (height && weight) {
